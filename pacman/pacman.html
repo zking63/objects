@@ -4,6 +4,7 @@
         <style type="text/css">
             body{
                 background-color: black;
+                margin: 0px;
             }
             div.row div{
                 width: 20px;
@@ -22,16 +23,21 @@
                 background-position: center;
                 background-size: cover;
             }
-            div.pacman{
+            div#pacman{
                 background: url("pacman1.gif");
                 background-repeat: no-repeat;
                 background-position: center;
                 background-size: cover;
+                width: 20px;
+                height: 20px;
+                position: absolute;
             }
         </style>
     </head>
     <body>
         <div id='world'></div>
+
+        <div id='pacman'></div>
         feature list
         1. have JS display the world of the brick and coin
         2. have pacman move up and down
@@ -39,7 +45,7 @@
         <script>
 
         var world = [
-            [1,2,2,2,2,2,2,2,2,2],
+            [2,2,2,2,2,2,2,2,2,2],
             [2,1,1,1,1,1,1,1,1,2],
             [2,1,1,1,1,1,1,1,1,2],
             [2,1,1,1,1,1,1,1,1,2],
@@ -51,24 +57,57 @@
             [2,2,2,2,2,2,2,2,2,2]
         ];
 
+        var pacman = {
+            x: 1,
+            y: 1
+        };
+
         function displayworld(){
             var output = '';
             for(var i=0; i<world.length; i++){
-                output += "\n<div class='row'>";
+                output += "\n<div class='row'>\n";
                 for(var j=0; j<world[i].length; j++){
                     if(world[i][j] == 2)
-                        output += "\n\t<div class='brick'></div>";
+                        output += "<div class='brick'></div>";
                     else if(world[i][j] == 1)
-                        output += "\n\t<div class='coin'></div>";
+                        output += "<div class='coin'></div>";
                     if(world[i][j] == 0)
-                        output += "\n\t<div class='empty'></div>";
+                        output += "<div class='empty'></div>";
                 }
                 output += "\n</div>";
             }
             // console.log(output);
             document.getElementById('world').innerHTML = output;
         }
-        displayworld()
+        function displayPacman(){
+            document.getElementById('pacman').style.top = pacman.y*20+"px";
+            document.getElementById('pacman').style.left = pacman.x*20+"px";
+        }
+
+        displayworld();
+        displayPacman();
+
+        document.onkeydown = function(e){
+            if(e.keyCode == 37){
+                pacman.x--;
+            }
+            else if(e.keyCode == 39){
+                pacman.x++;
+            }
+            else if(e.keyCode == 40){
+                pacman.y++;
+            }
+            else if(e.keyCode == 38){
+                pacman.y--;
+            }
+
+            if(world[pacman.y][pacman.x] == 1){
+                world[pacman.y][pacman.x] = 0;
+                displayworld();
+            }
+            //console.log(e.keyCode);
+            displayPacman();
+        }
         </script>
 
 
